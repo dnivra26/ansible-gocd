@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: "Tim Brown"
+  author: "Arvind Thangamani"
   description: "Install the Go Continuous Delivery tool.  Model even the most complex build and deploy workflow with ease."
   company: "ThoughtWorks, Inc."
   license: MIT

@@ -1,7 +1,7 @@
 [![Snap-CI](https://snap-ci.com/Tpbrown/ansible-gocd/branch/master/build_image)](https://snap-ci.com/Tpbrown/ansible-gocd/)
-ATTENTION: 
+ATTENTION:
 =
-This repository was recently transferred from ThoughtWorksInc to Tpbrown.  If you've forked it you'll need to update your remotes (or delete & re-fork). 
+This repository was recently transferred from Tpbrown to dnivra26.  If you've forked it you'll need to update your remotes (or delete & re-fork). 
 
 Apologies for the change -- it was adding confusion around support. (It's not supported ;-)
 
@@ -19,27 +19,15 @@ requirements
 * Ansible 1.6+ is required for UFW firewall module support.  
 * Ansible 1.5 can be used if you comment out the UFW tasks.
 
-installation instructions
-=========================
-
-This repository is organized as a multi-role playbook. In order to use it in an existing playbook, you must reference the roles as follows:
-```
-roles:
-  - tpbrown.gocd/roles/common
-  - tpbrown.gocd/roles/agent
-  - tpbrown.gocd/roles/server
-```
-
-The default is to install the latest version of the server and agent. To force installation of a specific version override GOCD_GO_VERSION to the desired version.
 
 ### Server
 * The server listens on port 8153 by default.  
 * Specify an email address for the Go administrator via GOCD_ADMIN_EMAIL.  **This is required**.
 * Optionally install Git, Subversion, or Mercurial **on all agent & server nodes** by setting any of the following to true.  Default is false.
-   * GOCD_SCM_GIT 
-   * GOCD_SCM_SVN 
+   * GOCD_SCM_GIT
+   * GOCD_SCM_SVN
    * GOCD_SCM_MERCURIAL
-   
+
 * A bash script to support automatic backups to Git is provided in /usr/share/go-server/backup_to_git.sh
    * Create a pipeline with two materials, 'remote' for the Git backup target, and 'local' for the embedded Git repo Go uses for configuration storage.
       * Destination directories should be 'remote' and 'local' respectively
@@ -47,7 +35,7 @@ The default is to install the latest version of the server and agent. To force i
    * If security is enabled use ADMIN_USER and ADMIN_PASSWORD environment variables to specify security.
 
    * Below is a sample config of a pipeline that triggers a backup of Go every 10 minutes, or if the configuration changes. It uses SSH keys for authentication to Github as described later in this document.  It shows ADMIN_PASSWORD as a standard variable, but you should use a secure variable.
-   
+
 ```XML
 <pipelines group="goAdmin">
     <pipeline name="backupGo" isLocked="true">
@@ -85,7 +73,7 @@ The default is to install the latest version of the server and agent. To force i
     </pipeline>
   </pipelines>
 ```
-   
+
 #### Optional Configuration Items
 **This capability is basic now, but the goal is to support full configuration of Go via source control with no dependency on the UI.  Hopefully this will include the ability to use individual pipeline configuration files that are included in the resulting Go configuration file.**
 
@@ -95,7 +83,7 @@ This role can manage the base Go configuration, without losing agent or pipeline
 * Enable configuration by setting GOCD_CONFIGURE to true and supply an administrator email address.
    * Required for all other configuration sections, but does nothing by itself *yet*. This will support configuring the server attributes (artifacts dir, command repository location, etc.) in the future.
    * GOCD_ADMIN_EMAIL - Email address for the system administrator
-   
+
 * SMTP/E-Mail notificationss
    * Set GOCD_CONFIGURE_SMTP to true and set appropriate values for the below variables:
       * GOCD_SMTP_HOST - IP address or hostname of the SMTP server
@@ -109,13 +97,13 @@ This role can manage the base Go configuration, without losing agent or pipeline
    * Set GOCD_CONFIGURE_SECURITY to true and optionally define LDAP configure.  By default an admin user of 'admin' with a password of 'insecure' will be created in /etc/go/passwd.
    * For LDAP authentication specify values for GOCD_LDAP_URL, GOCD_LDAP_MANAGER_DN, GOCD_LDAP_SEARCH_FILTER, and GOCD_LDAP_SEARCH_BASE. See Go's documentation on how to use these.
    * The default admin username, password, and file path can be overridden with GOCD_DEFAULT_ADMIN, GOCD_DEFAULT_PASS, and GOCD_PASSWORDFILE_PATH
-   
+
 * SSH keys.  This is primarily for Github SSH access.  Specify a keypair via attributes. The keys will be identical on all agents as well as the server.  This is because the server monitors for changes, and agents actually handle the checkout.
   * Set GOCD_CONFIGURE_SSH to true
   * GOCD_SSH_PRIVATE_KEY - Fully qualified path to the private key to use.  Both will be stored in /var/go/.ssh.  
   * GOCD_SSH_PUBLIC_KEY - Fully qualified path to the public key.  This is the key you should upload to Github.
   * GOCD_SSH_KNOWN_DOMAIN - Domain to import as a known host, defaults to github.com but can override for internal git servers.
-  
+
 ### Agents
 * By default one agent will be installed per CPU core available.  You can override this by setting GOCD_AGENT_INSTANCES to a specific value.
 * When multiple agents are installed each is controlled by it's own service (/etc/init.d/go-agentX). If you wish to uninstall the package, you'll need to manually remove those services as they're not recognized by the RPM/DEB.
