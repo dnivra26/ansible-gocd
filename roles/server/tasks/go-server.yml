@@ -73,3 +73,4 @@
 
 - name: create script for automated Go configuration backups to Git
   template: backup=no dest=/usr/share/go-server/ mode=0755 src=backup_to_git.sh
+  sudo: yes
