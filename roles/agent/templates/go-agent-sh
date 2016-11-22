@@ -79,7 +79,7 @@ export AGENT_STARTUP_ARGS
 export LOG_DIR
 export LOG_FILE
 
-CMD="$JAVA_HOME/bin/java -jar \"$AGENT_DIR/agent-bootstrapper.jar\" $GO_SERVER $GO_SERVER_PORT go-agent{{ item }}-running"
+CMD="$JAVA_HOME/bin/java -jar \"$AGENT_DIR/agent-bootstrapper.jar\" -serverUrl https://$GO_SERVER:$GO_SERVER_PORT/go"
 
 echo "[`date`] Starting Go Agent Bootstrapper with command: $CMD" >>$LOG_FILE
 echo "[`date`] Starting Go Agent Bootstrapper in directory: $AGENT_WORK_DIR" >>$LOG_FILE
