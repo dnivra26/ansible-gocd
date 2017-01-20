@@ -13,12 +13,12 @@
      - restart go service
 
 - name: restart go service
-  service: name={{ item | basename }} state=restarted
+  systemd: name={{ item | basename }} state=restarted
   with_items: go_services.stdout_lines
 
 - name: restart go-server
   sudo: yes
-  service: name=go-server state=restarted
+  systemd: name=go-server state=restarted
   notify:
      - ensure go-server running
 
@@ -27,4 +27,4 @@
 
 - name: restart firewalld
   sudo: yes
-  service: name=firewalld state=restarted
+  systemd: name=firewalld state=restarted

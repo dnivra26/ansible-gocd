@@ -22,7 +22,7 @@
 
 - name: start go-server
   sudo: yes
-  service: name=go-server state=started
+  systemd: name=go-server state=started
   notify:
      - ensure go-server running
 
