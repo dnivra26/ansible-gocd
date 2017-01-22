@@ -1,25 +1,25 @@
 ---
 - name: restart all go services
-  shell: ls -1 /etc/default/go-agent? /etc/default/go-server
+  shell: ls -1 /etc/default/go-agent?* /etc/default/go-server
   register: go_services
   notify:
      - restart go service
      - ensure go-server running
 
 - name: restart all agents
-  shell: ls -1 /etc/default/go-agent?
+  shell: ls -1 /etc/default/go-agent?*
   register: go_services
   notify:
      - restart go service
 
 - name: restart go service
-  systemd: name={{ item | basename }} state=restarted
+  shell: /etc/init.d/{{ item | basename }} restart
   with_items: go_services.stdout_lines
   sudo: yes
 
 - name: restart go-server
   sudo: yes
-  systemd: name=go-server state=restarted
+  shell: /etc/init.d/go-server restart
   notify:
      - ensure go-server running
 
@@ -28,4 +28,4 @@
 
 - name: restart firewalld
   sudo: yes
-  systemd: name=firewalld state=restarted
+  system: name=firewalld state=restarted
