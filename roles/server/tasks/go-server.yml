@@ -22,7 +22,7 @@
 
 - name: start go-server
   sudo: yes
-  service: name=go-server state=started
+  shell: /etc/init.d/go-server start
   notify:
      - ensure go-server running
 
